@@ -1,0 +1,2851 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "version": "1.0.0",
+    "title": "HelperMama"
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Operations related to user authentication"
+    },
+    {
+      "name": "Users",
+      "description": "User related operations"
+    },
+    {
+      "name": "Chats",
+      "description": "Chat related operations"
+    },
+    {
+      "name": "Project",
+      "description": "Project related operations"
+    },
+    {
+      "name": "Pages",
+      "description": "Static Pages related operations"
+    },
+    {
+      "name": "settings",
+      "description": "Setting Pages related operations"
+    },
+    {
+      "name": "Utils",
+      "description": "Utils related operations"
+    },
+    {
+      "name": "Messages",
+      "description": "Messages related operations"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "Singup system",
+        "operationId": "singup",
+        "tags": ["Authentication"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          },
+          {
+            "$ref": "#/components/parameters/headerdeviceType"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "kers@yopmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "test123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile and Auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/auth/logIn": {
+      "post": {
+        "summary": "Log into app",
+        "operationId": "logIn",
+        "tags": ["Authentication"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          },
+          {
+            "$ref": "#/components/parameters/headerdeviceType"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password", "deviceToken"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "rajneesh@yopmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "test123"
+                  },
+                  "device_token": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile and Auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/auth/logOut": {
+      "get": {
+        "summary": "logout user",
+        "operationId": "logOut",
+        "tags": ["Authentication"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          },
+          {
+            "$ref": "#/components/parameters/headerdeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success message indicating a user is logged out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/getAccessToken": {
+      "get": {
+        "summary": "accesstoken",
+        "operationId": "accessToken",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/createConversation": {
+      "post": {
+        "summary": "messages",
+        "operationId": "createConversation",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["friendlyName", "type", "platform", "job_id"],
+                "properties": {
+                  "friendlyName": {
+                    "type": "string",
+                    "example": "Rajneesh_Sumit"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "ONE_TO_ONE/GROUP"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "example": "1"
+                  },
+                  "job_id": {
+                    "type": "number",
+                    "example": "12"
+                  },
+                  "image": {
+                    "type": "string",
+                    "example": "group/groupimg.png"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/fetchListConversation": {
+      "get": {
+        "summary": "Fetch List Conversation",
+        "operationId": "fetchListConversation",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Save Event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/filterListConversation": {
+      "post": {
+        "summary": "messages",
+        "operationId": "filterListConversation",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["type"],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "ALL/ONE_TO_ONE/GROUP"
+                  },
+                  "role_id": {
+                    "type": "number",
+                    "example": "4"
+                  },
+                  "search": {
+                    "type": "number",
+                    "example": ""
+                  },
+                  "not_reply": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/getConversation/{sid}": {
+      "get": {
+        "summary": "Get Conversation",
+        "operationId": "getConversation",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          },
+          {
+            "name": "sid",
+            "in": "path",
+            "description": "sid conversation",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Save Event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/sendMessage": {
+      "post": {
+        "summary": "messages",
+        "operationId": "sendMessage",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "author", "body"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CHed9178d5f5c241e9bcb96581bffb4ec6"
+                  },
+                  "author": {
+                    "type": "string",
+                    "example": "smee"
+                  },
+                  "body": {
+                    "type": "string",
+                    "example": "hello test"
+                  },
+                  "attributes": {
+                    "type": "string",
+                    "example": {
+                      "job_id": 256
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/sendMessageWatsup": {
+      "post": {
+        "summary": "messages",
+        "operationId": "sendMessageWatsup",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["whatsapp_number", "message"],
+                "properties": {
+                  "whatsapp_number": {
+                    "type": "string",
+                    "example": "+919783843316"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Hello there!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/sendMessageText": {
+      "post": {
+        "summary": "messages",
+        "operationId": "sendMessageText",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["phone_number", "message"],
+                "properties": {
+                  "phone_number": {
+                    "type": "string",
+                    "example": "+919783843316"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Hello there!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/sendMessageMessanger": {
+      "post": {
+        "summary": "messages",
+        "operationId": "sendMessageMessanger",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["messenger_user_id", "message"],
+                "properties": {
+                  "messenger_user_id": {
+                    "type": "string",
+                    "example": "+919783843316"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Hello there!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/allMessage": {
+      "post": {
+        "summary": "messages",
+        "operationId": "sallMessage",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CHed9178d5f5c241e9bcb96581bffb4ec6"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/deleteMessage": {
+      "post": {
+        "summary": "messages",
+        "operationId": "sallMessage",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "msid"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CHed9178d5f5c241e9bcb96581bffb4ec6"
+                  },
+                  "msid": {
+                    "type": "string",
+                    "example": "IM1fbfb748da914e55932ede90eff6f0f5"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/getMessageById": {
+      "post": {
+        "summary": "messages",
+        "operationId": "getMessageById",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "msid"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CHb6bcb1613d9c4779b8656e605b7be470"
+                  },
+                  "msid": {
+                    "type": "string",
+                    "example": "IMfc6897bcc6cd4dd5ad848590c04507f9"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/addRemoveGroupParticipant": {
+      "post": {
+        "summary": "add Remove Group Member",
+        "operationId": "addRemoveGroupParticipant",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "groupId", "userId", "action"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CH7d3775fe6a78439a8788b924fa0c55f6"
+                  },
+                  "pid": {
+                    "type": "string",
+                    "example": "MB8b7d42288c194325ab442cc66fe7505a"
+                  },
+                  "groupId": {
+                    "type": "string",
+                    "example": "14"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "example": "8"
+                  },
+                  "action": {
+                    "type": "string",
+                    "example": "ADD/REMOVE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User update Group data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/fetchAllParticipant/{sid}": {
+      "get": {
+        "summary": "Get fetchAllParticipant",
+        "operationId": "fetchAllParticipant",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          },
+          {
+            "name": "sid",
+            "in": "path",
+            "description": "sid conversation",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Save Event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/getParticipantById": {
+      "post": {
+        "summary": "messages",
+        "operationId": "getParticipantById",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "psid"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CHed9178d5f5c241e9bcb96581bffb4ec6"
+                  },
+                  "psid": {
+                    "type": "string",
+                    "example": "MB8244fda2590449e881d16f7cfad72cde"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/fetchConversationByParticipant": {
+      "post": {
+        "summary": "fetch participants",
+        "operationId": "fetchConversationByParticipant",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "psid"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CHed9178d5f5c241e9bcb96581bffb4ec6"
+                  },
+                  "psid": {
+                    "type": "string",
+                    "example": "MB8244fda2590449e881d16f7cfad72cde"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/updateLastMessage": {
+      "post": {
+        "summary": "messages",
+        "operationId": "updateLastMessage",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["group_id", "message"],
+                "properties": {
+                  "group_id": {
+                    "type": "number",
+                    "example": "36"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Hello"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/updateTwilioLastMsg": {
+      "get": {
+        "summary": "Get Data",
+        "operationId": "updateTwilioLastMsg",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Save Event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/webfilterListConversation": {
+      "post": {
+        "summary": "messages",
+        "operationId": "webfilterListConversation",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["type"],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "ALL/ONE_TO_ONE/GROUP"
+                  },
+                  "role_id": {
+                    "type": "number",
+                    "example": "4"
+                  },
+                  "search": {
+                    "type": "number",
+                    "example": ""
+                  },
+                  "not_reply": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/deleteCoversation": {
+      "delete": {
+        "summary": "messages",
+        "operationId": "sallMessage",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CHed9178d5f5c241e9bcb96581bffb4ec6"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/createWhatsappGroup": {
+      "post": {
+        "summary": "messages",
+        "operationId": "createConversation",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["friendlyName", "type", "platform"],
+                "properties": {
+                  "friendlyName": {
+                    "type": "string",
+                    "example": "Rajneesh_Sumit"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "ONE_TO_ONE/GROUP"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "example": "2"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/addWhatsappParticpant": {
+      "post": {
+        "summary": "add Whatsapp Member",
+        "operationId": "addWhatsappParticpant",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "group_id", "user_id"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CH7d3775fe6a78439a8788b924fa0c55f6"
+                  },
+                  "group_id": {
+                    "type": "string",
+                    "example": "14"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "example": "8"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User update Group data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/updateReadMessageCount": {
+      "put": {
+        "summary": "update unread messgae count of current user",
+        "operationId": "updateReadMessageCount",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CH7d3775fe6a78439a8788b924fa0c55f6"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User update Group data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/createAdminJobGroup": {
+      "post": {
+        "summary": "messages",
+        "operationId": "createAdminJobGroup",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "friendlyName",
+                  "type",
+                  "platform",
+                  "job_id",
+                  "user_id"
+                ],
+                "properties": {
+                  "friendlyName": {
+                    "type": "string",
+                    "example": "Rajneesh_Sumit"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "ONE_TO_ONE/GROUP"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "example": "1"
+                  },
+                  "job_id": {
+                    "type": "number",
+                    "example": "12"
+                  },
+                  "image": {
+                    "type": "string",
+                    "example": "group/groupimg.png"
+                  },
+                  "user_id": {
+                    "type": "number",
+                    "example": "20"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/createSMSGroup": {
+      "post": {
+        "summary": "Create SMS Group",
+        "operationId": "createSMSGroup",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["friendlyName", "type", "platform"],
+                "properties": {
+                  "friendlyName": {
+                    "type": "string",
+                    "example": "Rajneesh_Sumit"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "ONE_TO_ONE/GROUP"
+                  },
+                  "platform": {
+                    "type": "string",
+                    "example": "2"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/addSMSParticpant": {
+      "post": {
+        "summary": "add SMS Member",
+        "operationId": "addSMSParticpant",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["sid", "group_id", "user_id"],
+                "properties": {
+                  "sid": {
+                    "type": "string",
+                    "example": "CH7d3775fe6a78439a8788b924fa0c55f6"
+                  },
+                  "group_id": {
+                    "type": "string",
+                    "example": "14"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "example": "8"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User update Group data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/outboundCall": {
+      "post": {
+        "summary": "Outbound Calls",
+        "operationId": "outboundCall",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["mobile_number"],
+                "properties": {
+                  "mobile_number": {
+                    "type": "string",
+                    "example": "+91123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User update Group data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/whatsappCoversation": {
+      "post": {
+        "summary": "Get Whastapp Conversation sid",
+        "operationId": "whatsappCoversation",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "staff_id",
+                  "staff_whatsapp_num",
+                  "user_id",
+                  "user_whatsapp_num"
+                ],
+                "properties": {
+                  "staff_id": {
+                    "type": "number",
+                    "example": "2"
+                  },
+                  "staff_whatsapp_num": {
+                    "type": "string",
+                    "example": "+91123456789"
+                  },
+                  "user_id": {
+                    "type": "number",
+                    "example": "14"
+                  },
+                  "user_whatsapp_num": {
+                    "type": "string",
+                    "example": "+91123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User update Group data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/smsConversation": {
+      "post": {
+        "summary": "messages",
+        "operationId": "getsmssid",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["type"],
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "example": "1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/getchatcount": {
+      "get": {
+        "summary": "Get Chat Count",
+        "operationId": "getchatcount",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Save Event",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    },
+    "/chats/createAdminWhatsappGroup": {
+      "post": {
+        "summary": "Create Admin Whatsapp Group",
+        "operationId": "createAdminWhatsappGroup",
+        "tags": ["Chats"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/headerLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/headerPlatform"
+          },
+          {
+            "$ref": "#/components/parameters/headerVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["friendlyName", "type", "platform", "user_id"],
+                "properties": {
+                  "friendlyName": {
+                    "type": "string",
+                    "example": "Rajneesh_Sumit"
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "ONE_TO_ONE/GROUP"
+                  },
+                  "platform": {
+                    "type": "number",
+                    "example": "2"
+                  },
+                  "user_id": {
+                    "type": "number",
+                    "example": "2"
+                  },
+                  "role_id": {
+                    "type": "number",
+                    "example": "2"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat Message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    }
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "singup": {
+      "type": "String",
+      "example": {
+        "countryCode": "+91",
+        "mobile": "9412322111"
+      }
+    },
+    "responsesOk": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "responsesError": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "msg": {
+          "type": "string"
+        },
+        "error": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "headerVersion": {
+        "name": "version",
+        "in": "header",
+        "required": true,
+        "value": "1.0.0"
+      },
+      "headerLanguage": {
+        "name": "language",
+        "in": "header",
+        "required": true,
+        "value": "en"
+      },
+      "headerPlatform": {
+        "name": "os",
+        "in": "header",
+        "required": true,
+        "value": "android"
+      },
+      "headerdeviceType": {
+        "name": "x-py_chat-device",
+        "in": "header",
+        "required": true,
+        "value": "1"
+      },
+      "queryPerPage": {
+        "in": "query",
+        "name": "perPage",
+        "description": "number of records per page",
+        "allowEmptyValue": false,
+        "required": false,
+        "value": 10,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "queryPage": {
+        "in": "query",
+        "name": "page",
+        "description": "page number",
+        "allowEmptyValue": false,
+        "required": false,
+        "value": 1,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "fromDate": {
+        "in": "query",
+        "name": "fromDate",
+        "description": "from Date",
+        "allowEmptyValue": true,
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "toDate": {
+        "in": "query",
+        "name": "toDate",
+        "description": "to date",
+        "allowEmptyValue": true,
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "paymentType": {
+        "in": "query",
+        "name": "paymentType",
+        "description": "payment type",
+        "allowEmptyValue": true,
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["approved", "unapproved"]
+        }
+      },
+      "status": {
+        "in": "query",
+        "name": "status",
+        "description": "status of notification",
+        "allowEmptyValue": false,
+        "required": false
+      },
+      "userstatus": {
+        "in": "query",
+        "name": "userstatus",
+        "description": "status for user account",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": ["Online", "Offline", "Away", "Busy"]
+        }
+      },
+      "location": {
+        "in": "query",
+        "name": "location",
+        "description": "location for upload",
+        "allowEmptyValue": false,
+        "required": false
+      },
+      "extension": {
+        "in": "query",
+        "name": "extension",
+        "description": "extension of file",
+        "allowEmptyValue": false,
+        "required": false
+      },
+      "requestId": {
+        "in": "query",
+        "name": "requestId",
+        "description": "requestId of file",
+        "allowEmptyValue": false,
+        "required": false
+      }
+    },
+    "schemas": {
+      "ApiResponse": {
+        "required": ["success", "message"],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {}
+        }
+      },
+      "User": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "isSocialPic": {
+            "type": "boolean"
+          },
+          "countryCode": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequestError": {
+        "description": "Request fails validation or doesn't meet all conditions for request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "example": {
+                "success": false,
+                "message": "Validation failed",
+                "data": ""
+              },
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Requested resource was not found"
+      },
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid"
+      },
+      "responsesOk": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "responsesError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "msg": {
+            "type": "string"
+          },
+          "error": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "authorization"
+      }
+    }
+  }
+}
